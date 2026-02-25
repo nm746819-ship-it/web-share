@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ar" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebShare — P2P File Transfer</title>
+    <meta
+      name="description"
+      content="Transfer files instantly between devices on the same WiFi network. No upload needed — pure peer-to-peer."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <!-- Animated Background -->
+    <div class="bg-gradient"></div>
+    <div class="bg-grid"></div>
+
+    <div id="app">
+      <!-- Header -->
+      <header class="header">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+              <polyline points="16 6 12 2 8 6" />
+              <line x1="12" y1="2" x2="12" y2="15" />
+            </svg>
+          </div>
+          <span class="logo-text"
+            >Web<span class="logo-accent">Share</span></span
+          >
+        </div>
+        <div class="connection-status" id="connectionStatus">
+          <span class="status-dot"></span>
+          <span class="status-text">Not Connected</span>
+        </div>
+      </header>
+
+      <!-- ========== VIEW 1: HOME ========== -->
+      <section id="viewHome" class="view active">
+        <div class="hero">
+          <div class="hero-icon-wrapper">
+            <div class="hero-icon-glow"></div>
+            <div class="hero-icon">
+              <svg
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="url(#iconGrad)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <defs>
+                  <linearGradient
+                    id="iconGrad"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" style="stop-color: #6c63ff" />
+                    <stop offset="100%" style="stop-color: #00d9ff" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"
+                />
+                <polyline points="13 2 13 9 20 9" />
+                <line x1="9" y1="13" x2="15" y2="13" />
+                <line x1="9" y1="17" x2="15" y2="17" />
+              </svg>
+            </div>
+          </div>
+          <h1 class="hero-title">
+            Share Files <span class="text-gradient">Instantly</span>
+          </h1>
+          <p class="hero-subtitle">
+            Transfer files peer-to-peer between devices on the same network.
+            Fast, secure, no upload needed.
+          </p>
+        </div>
+
+        <div class="actions-grid">
+          <!-- Create Room Card -->
+          <button class="action-card" id="btnCreateRoom">
+            <div class="action-icon create">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="16" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+              </svg>
+            </div>
+            <div class="action-info">
+              <h3>Create Room</h3>
+              <p>Generate a code and wait for someone to join</p>
+            </div>
+            <div class="action-arrow">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </div>
+          </button>
+
+          <!-- Join Room Card -->
+          <button class="action-card" id="btnJoinRoom">
+            <div class="action-icon join">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                <polyline points="10 17 15 12 10 7" />
+                <line x1="15" y1="12" x2="3" y2="12" />
+              </svg>
+            </div>
+            <div class="action-info">
+              <h3>Join Room</h3>
+              <p>Enter a room code to connect and receive files</p>
+            </div>
+            <div class="action-arrow">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </div>
+          </button>
+        </div>
+
+        <!-- Join Room Modal -->
+        <div class="modal-overlay" id="joinModal">
+          <div class="modal glass-card">
+            <h2>Join Room</h2>
+            <p>Enter the 6-character room code</p>
+            <div class="code-input-group">
+              <input
+                type="text"
+                id="joinCodeInput"
+                class="code-input"
+                maxlength="6"
+                placeholder="XXXXXX"
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </div>
+            <div class="modal-actions">
+              <button class="btn btn-secondary" id="btnCancelJoin">
+                Cancel
+              </button>
+              <button class="btn btn-primary" id="btnConfirmJoin">
+                Connect
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== VIEW 2: WAITING / ROOM CREATED ========== -->
+      <section id="viewWaiting" class="view">
+        <div class="glass-card waiting-card">
+          <div class="pulse-ring">
+            <div class="pulse-circle"></div>
+            <div class="pulse-circle delay-1"></div>
+            <div class="pulse-circle delay-2"></div>
+            <div class="pulse-dot"></div>
+          </div>
+          <h2>Waiting for peer...</h2>
+          <p>Share this code with the other device</p>
+          <div class="room-code-display">
+            <span id="roomCodeText" class="room-code-value">------</span>
+            <button class="btn-copy" id="btnCopyCode" title="Copy code">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                />
+              </svg>
+            </button>
+          </div>
+          <button class="btn btn-secondary" id="btnCancelWaiting">
+            Cancel
+          </button>
+        </div>
+      </section>
+
+      <!-- ========== VIEW 3: CONNECTED ========== -->
+      <section id="viewConnected" class="view">
+        <div class="connected-layout">
+          <!-- Peer Info -->
+          <div class="glass-card peer-card">
+            <div class="peer-avatar">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <div class="peer-info">
+              <h3>Connected to peer</h3>
+              <p id="peerIdDisplay">—</p>
+            </div>
+            <button class="btn btn-danger btn-sm" id="btnDisconnect">
+              Disconnect
+            </button>
+          </div>
+
+          <!-- Drop Zone -->
+          <div class="drop-zone glass-card" id="dropZone">
+            <div class="drop-zone-content">
+              <div class="drop-icon">
+                <svg
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              </div>
+              <h3>Drag & drop files here</h3>
+              <p>or click to browse</p>
+              <input type="file" id="fileInput" multiple hidden />
+            </div>
+          </div>
+
+          <!-- Transfer List -->
+          <div class="transfers-section">
+            <h3 class="section-title">Transfers</h3>
+            <div id="transferList" class="transfer-list">
+              <div class="empty-state">
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  opacity="0.3"
+                >
+                  <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+                  <path
+                    d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"
+                  />
+                </svg>
+                <p>No transfers yet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+This is a test file for the WebShare P2P file transfer application.
+It contains some dummy text to verify that the file chunking and reassembly works correctly.
+WebRTC DataChannels are being used for direct peer-to-peer transfer.
+1234567890
+ABCDE
+FGHIJ
+KLMNO
+PQRST
+UVWXY
+Z
