@@ -345,6 +345,11 @@ body {
   color: var(--accent-secondary);
 }
 
+.action-icon.scan {
+  background: rgba(0, 230, 118, 0.12);
+  color: var(--success);
+}
+
 .action-info {
   flex: 1;
   position: relative;
@@ -451,6 +456,54 @@ body {
 .code-input::placeholder {
   color: var(--text-muted);
   letter-spacing: 0.3em;
+}
+
+.scanner-container {
+  width: 100%;
+  aspect-ratio: 1;
+  max-height: 350px;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-card);
+  border-radius: var(--radius-md);
+  margin-bottom: 24px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-reader-window {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* html5-qrcode overrides */
+#qr-reader {
+  border: none !important;
+}
+#qr-reader__scan_region {
+  background: black;
+}
+#qr-reader__scan_region img {
+  object-fit: cover;
+}
+#qr-reader__dashboard {
+  background: var(--bg-card) !important;
+  padding: 10px !important;
+  color: var(--text-primary) !important;
+}
+#qr-reader a {
+  color: var(--accent-primary) !important;
+}
+#qr-reader button {
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font);
 }
 
 .modal-actions {
@@ -604,6 +657,27 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-family: var(--font);
+}
+
+.qr-code-wrapper {
+  background: white;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  margin: 0 auto 28px;
+  width: max-content;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all var(--transition-smooth);
+}
+
+.qr-code-wrapper.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.qr-code-wrapper canvas {
+  display: block;
 }
 
 .btn-copy {

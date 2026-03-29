@@ -13,9 +13,8 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
-    />
-    <script type="module" crossorigin src="./assets/index-DwMPwpGQ.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-D4SIoA1K.css">
+    />
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
     <!-- Animated Background -->
@@ -174,6 +173,48 @@
               </svg>
             </div>
           </button>
+
+          <!-- Scan QR Card -->
+          <button class="action-card" id="btnScanQR">
+            <div class="action-icon scan">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <rect x="7" y="7" width="3" height="3" />
+                <rect x="14" y="7" width="3" height="3" />
+                <rect x="7" y="14" width="3" height="3" />
+                <rect x="14" y="14" width="3" height="3" />
+                <path d="M3 9h18" />
+                <path d="M9 3v18" />
+              </svg>
+            </div>
+            <div class="action-info">
+              <h3>Scan QR Code</h3>
+              <p>Quickly join by scanning the room's QR</p>
+            </div>
+            <div class="action-arrow">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </div>
+          </button>
         </div>
 
         <!-- Join Room Modal -->
@@ -198,6 +239,21 @@
               </button>
               <button class="btn btn-primary" id="btnConfirmJoin">
                 Connect
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Scanner Modal -->
+        <div class="modal-overlay" id="scanModal">
+          <div class="modal glass-card scan-modal">
+            <h2>Scan QR Code</h2>
+            <p>Point your camera at the QR code</p>
+            <div class="scanner-container">
+              <div id="qr-reader" class="qr-reader-window"></div>
+            </div>
+            <div class="modal-actions">
+              <button class="btn btn-secondary" id="btnCancelScan">
+                Cancel
               </button>
             </div>
           </div>
@@ -234,6 +290,9 @@
                 />
               </svg>
             </button>
+          </div>
+          <div class="qr-code-wrapper">
+            <canvas id="qrCanvas"></canvas>
           </div>
           <button class="btn btn-secondary" id="btnCancelWaiting">
             Cancel
@@ -326,6 +385,7 @@
 
     <!-- Toast container -->
     <div id="toastContainer" class="toast-container"></div>
-
+
+    <script type="module" src="/main.js"></script>
   </body>
 </html>

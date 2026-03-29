@@ -1,4 +1,6 @@
 import Peer from 'peerjs';
+import QRCode from 'qrcode';
+import { Html5Qrcode } from 'html5-qrcode';
 
 // ===== DOM ELEMENTS =====
 const $ = (sel) => document.querySelector(sel);
@@ -10,6 +12,7 @@ const statusText = connectionStatus.querySelector('.status-text');
 
 const btnCreateRoom = $('#btnCreateRoom');
 const btnJoinRoom = $('#btnJoinRoom');
+const btnScanQR = $('#btnScanQR');
 const joinModal = $('#joinModal');
 const joinCodeInput = $('#joinCodeInput');
 const btnCancelJoin = $('#btnCancelJoin');
@@ -23,6 +26,9 @@ const dropZone = $('#dropZone');
 const fileInput = $('#fileInput');
 const transferList = $('#transferList');
 const toastContainer = $('#toastContainer');
+const qrCanvas = $('#qrCanvas');
+const scanModal = $('#scanModal');
+const btnCancelScan = $('#btnCancelScan');
 
 // ===== STATE =====
 let peer = null;
@@ -322,6 +328,20 @@ btnCreateRoom.addEventListener('click', async () => {
   roomCodeText.textContent = roomCode;
   showView(viewWaiting);
 
+  // Generate QR Code
+  QRCode.toCanvas(qrCanvas, roomCode, {
+    width: 200,
+    margin: 1,
+    color: {
+      dark: '#0a0a1a',
+      light: '#ffffff'
+    }
+  }, (err) => {
+    if (!err) {
+      qrCanvas.parentElement.classList.add('visible');
+    }
+  });
+
   peer.on('connection', (connection) => {
     setupConnection(connection);
   });
@@ -349,15 +369,7 @@ joinModal.addEventListener('click', (e) => {
   if (e.target === joinModal) joinModal.classList.remove('active');
 });
 
-btnConfirmJoin.addEventListener('click', async () => {
-  const code = joinCodeInput.value.trim().toUpperCase();
-  if (code.length !== 6) {
-    showToast('Please enter a 6-character code');
-    return;
-  }
-
-  joinModal.classList.remove('active');
-
+async function connectToRoom(code) {
   const myId = 'ws-' + generateCode() + '-cli';
 
   try {
@@ -377,6 +389,67 @@ btnConfirmJoin.addEventListener('click', async () => {
       if (peer) { peer.destroy(); peer = null; }
     }
   }, 10000);
+}
+
+btnConfirmJoin.addEventListener('click', () => {
+  const code = joinCodeInput.value.trim().toUpperCase();
+  if (code.length !== 6) {
+    showToast('Please enter a 6-character code');
+    return;
+  }
+  joinModal.classList.remove('active');
+  connectToRoom(code);
+});
+
+// Scan QR Code
+let html5QrCode;
+
+btnScanQR.addEventListener('click', () => {
+  scanModal.classList.add('active');
+  
+  // Initialize scanner
+  if (!html5QrCode) {
+    html5QrCode = new Html5Qrcode("qr-reader");
+  }
+
+  const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+  html5QrCode.start(
+    { facingMode: "environment" },
+    config,
+    (decodedText, decodedResult) => {
+      // Handle on success
+      const code = decodedText.trim().toUpperCase();
+      if (code.length === 6 && /^[A-Z0-9]+$/.test(code)) {
+        html5QrCode.stop().then(() => {
+          scanModal.classList.remove('active');
+          connectToRoom(code);
+        }).catch((err) => {
+          console.error("Failed to stop scanner", err);
+        });
+      }
+    },
+    (errorMessage) => {
+      // parse errors, can be ignored
+    }
+  ).catch((err) => {
+    showToast('Could not start camera');
+    scanModal.classList.remove('active');
+    console.error(err);
+  });
+});
+
+btnCancelScan.addEventListener('click', () => {
+  if (html5QrCode && html5QrCode.isScanning) {
+    html5QrCode.stop().then(() => {
+      scanModal.classList.remove('active');
+    }).catch((err) => {
+      console.error(err);
+      scanModal.classList.remove('active');
+    });
+  } else {
+    scanModal.classList.remove('active');
+  }
 });
 
 // Enter key on join input
@@ -388,6 +461,7 @@ joinCodeInput.addEventListener('keydown', (e) => {
 btnCancelWaiting.addEventListener('click', () => {
   if (peer) { peer.destroy(); peer = null; }
   showView(viewHome);
+  qrCanvas.parentElement.classList.remove('visible');
 });
 
 // Copy room code
